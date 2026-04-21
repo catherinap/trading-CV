@@ -34,6 +34,7 @@ document.querySelectorAll(".copy-link").forEach((link) => {
     });
 });
 
+
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
 
@@ -53,3 +54,6 @@ document.addEventListener("keydown", (e) => {
         lightbox.classList.remove("active");
     }
 });
+
+const card = img.closest('.gallery-card');
+const caption = card?.querySelector('figcaption')?.textContent || img.alt || '';

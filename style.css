@@ -560,6 +560,29 @@ section {
     animation: zoomIn 0.25s ease;
 }
 
+.gallery-card img {
+    cursor: zoom-in;
+}
+
+.lightbox-caption {
+    margin-top: 0.75rem;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #c9d2e3;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 1.4rem;
+}
+
 .zoomable {
     cursor: zoom-in;
     transition: transform 0.25s ease;
