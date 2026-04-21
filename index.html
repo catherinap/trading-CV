@@ -299,8 +299,13 @@
       <div class="container">Built as a focused portfolio page to support trading-related applications and networking opportunities.</div>
     </footer>
 
-    <div id="lightbox">
-      <img id="lightbox-img" src="" />
+    <div id="lightbox" aria-hidden="true">
+      <button id="lightbox-close" type="button" aria-label="Close image">×</button>
+
+      <figure class="lightbox-figure">
+        <img id="lightbox-img" src="" alt="" />
+        <figcaption id="lightbox-caption"></figcaption>
+      </figure>
     </div>
 
     <script src="script.js"></script>
