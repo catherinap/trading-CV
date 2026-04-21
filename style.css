@@ -27,8 +27,8 @@ html {
 body {
     font-family: Inter, Arial, Helvetica, sans-serif;
     background:
-        radial-gradient(circle at top left, rgba(87, 184, 255, 0.13), transparent 30%),
-        radial-gradient(circle at top right, rgba(110, 247, 200, 0.10), transparent 24%),
+        radial-gradient(circle at top left, rgba(87, 171, 255, 0.13), transparent 30%),
+        radial-gradient(circle at top right, rgba(110, 181, 247, 0.1), transparent 24%),
         linear-gradient(180deg, #08101c 0%, #0a0f18 100%);
     color: var(--text);
     line-height: 1.6;
@@ -461,11 +461,12 @@ section {
     left: 14px;
     right: 14px;
     bottom: 14px;
-    padding: 10px 12px;
+    padding: 8px 6px;
+    text-align: center;
     border-radius: 12px;
     background: rgba(5, 10, 17, 0.72);
     color: #eef6ff;
-    font-size: 0.88rem;
+    font-size: 0.7rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(8px);
 }
