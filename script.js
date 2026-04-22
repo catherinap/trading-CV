@@ -3,6 +3,7 @@ const observer = new IntersectionObserver(
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 entry.target.classList.add("visible");
+                observer.unobserve(entry.target);
             }
         });
     },
@@ -11,29 +12,78 @@ const observer = new IntersectionObserver(
     },
 );
 
-document.querySelectorAll(".fade-up").forEach((item) => observer.observe(item));
+document.querySelectorAll(".fade-up, .reveal").forEach((item) => observer.observe(item));
+
+const navbar = document.querySelector(".navbar");
+let lastScrollY = window.scrollY;
+
+function handleNavbar() {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > 10) {
+        navbar.classList.add("is-scrolled");
+    } else {
+        navbar.classList.remove("is-scrolled");
+        navbar.classList.remove("is-hidden");
+    }
+
+    if (currentScrollY > 140 && currentScrollY > lastScrollY) {
+        navbar.classList.add("is-hidden");
+    } else {
+        navbar.classList.remove("is-hidden");
+    }
+
+    lastScrollY = currentScrollY;
+}
+
+window.addEventListener("scroll", handleNavbar, { passive: true });
+handleNavbar();
+
+async function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+    }
+
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "absolute";
+    textarea.style.left = "-9999px";
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    textarea.remove();
+}
 
 document.querySelectorAll(".copy-link").forEach((link) => {
-    link.addEventListener("click", function (e) {
+    link.addEventListener("click", async function (e) {
         e.preventDefault();
 
-        const text = this.getAttribute("data-copy");
+        const text = this.dataset.copy || "";
+        if (!text) return;
 
-        navigator.clipboard.writeText(text).then(() => {
-            const original = this.innerHTML;
+        const originalHTML = this.innerHTML;
 
+        try {
+            await copyText(text);
+            this.classList.add("is-copied");
             this.innerHTML = `
-        <span>Copied!</span>
+        <span>Copied</span>
         <span>✓</span>
       `;
+        } catch (err) {
+            this.innerHTML = `
+        <span>Copy failed</span>
+        <span>!</span>
+      `;
+        }
 
-            setTimeout(() => {
-                this.innerHTML = original;
-            }, 1200);
-        });
+        setTimeout(() => {
+            this.classList.remove("is-copied");
+            this.innerHTML = originalHTML;
+        }, 1200);
     });
 });
-
 
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
@@ -41,28 +91,27 @@ const lightboxCaption = document.getElementById("lightbox-caption");
 const lightboxClose = document.getElementById("lightbox-close");
 
 function openLightbox(img) {
-    const captionEl = img.closest(".gallery-card")?.querySelector(".gallery-caption");
-
     lightboxImg.src = img.currentSrc || img.src;
     lightboxImg.alt = img.alt || "";
-    lightboxCaption.textContent = captionEl
-        ? captionEl.textContent.trim()
-        : (img.alt || "");
+    lightboxCaption.textContent = img.alt || "";
 
     lightbox.classList.add("active");
     lightbox.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
+    document.body.classList.add("modal-open");
 }
 
 function closeLightbox() {
     lightbox.classList.remove("active");
     lightbox.setAttribute("aria-hidden", "true");
-    lightboxImg.src = "";
-    lightboxCaption.textContent = "";
-    document.body.style.overflow = "";
+    document.body.classList.remove("modal-open");
+
+    setTimeout(() => {
+        lightboxImg.src = "";
+        lightboxCaption.textContent = "";
+    }, 180);
 }
 
-document.querySelectorAll("#gallery .zoomable").forEach((img) => {
+document.querySelectorAll(".zoomable").forEach((img) => {
     img.addEventListener("click", () => openLightbox(img));
 });
 
@@ -77,8 +126,3 @@ document.addEventListener("keydown", (e) => {
         closeLightbox();
     }
 });
-
-
-
-
-
